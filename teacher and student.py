@@ -1,3 +1,13 @@
+def average(grades):
+    "Расчет средней оценки"
+    evaluations = []
+    k = 0
+    for cours, grade in grades.items():
+        evaluations.append(sum(grade))
+        k += len(grade)
+    return sum(evaluations) / k
+
+
 class Student:
     def __init__(self, name, surname, gender):
         self.name = name
@@ -8,13 +18,24 @@ class Student:
         self.grades = {}
 
     def rate_hw(self, lecturer, course, grade):
-        if isinstance(lecturer, Lecturer) and course in self.courses_in_progress and course in lecturer.courses_attached:
+        if isinstance(lecturer,
+                      Lecturer) and course in self.courses_in_progress and course in lecturer.courses_attached:
             if course in lecturer.grades:
                 lecturer.grades[course] += [grade]
             else:
                 lecturer.grades[course] = [grade]
         else:
             return 'Ошибка'
+
+    def __str__(self):
+        res = (
+            f"Имя: {self.name}\n"
+            f"Фамилия: {self.surname}\n"
+            f"Средняя оценка за лекции: {average(self.grades)}\n"
+            f"Курсы в процессе изучения: {','.join(self.courses_in_progress)}\n"
+            f"Завершенные курсы: {','.join(self.finished_courses)}\n"
+        )
+        return res
 
 
 class Mentor:
@@ -28,6 +49,14 @@ class Lecturer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
         self.grades = {}
+
+    def __str__(self):
+        res = (
+            f"Имя: {self.name}\n"
+            f"Фамилия: {self.surname}\n"
+            f"Средняя оценка за лекции: {average(self.grades)}\n"
+        )
+        return res
 
 
 class Reviewer(Mentor):
@@ -43,6 +72,12 @@ class Reviewer(Mentor):
         else:
             return 'Ошибка'
 
+    def __str__(self):
+        res = (
+            f"Имя: {self.name}\n"
+            f"Фамилия: {self.surname}\n"
+        )
+        return res
 
 
 best_student = Student('Ruoy', 'Eman', 'your_gender')
@@ -64,3 +99,7 @@ best_student.rate_hw(cool_lecturer, 'Python', 10)
 
 print(best_student.grades)
 print(cool_lecturer.grades)
+
+print(cool_reviewer)
+print(cool_lecturer)
+print(best_student)
