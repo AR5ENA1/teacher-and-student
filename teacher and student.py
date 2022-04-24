@@ -1,11 +1,37 @@
 def average(grades):
-    "Расчет средней оценки"
+    """Расчет средней оценки"""
     evaluations = []
     k = 0
     for cours, grade in grades.items():
         evaluations.append(sum(grade))
         k += len(grade)
     return sum(evaluations) / k
+
+
+def aver_student(student_list):
+    """Расчет средней оценки по всем студентам"""
+    courses_list = {}
+    for student in student_list:
+        for courses, grades in student.grades.items():
+            if courses in courses_list:
+                courses_list[courses] += grades
+            else:
+                courses_list[courses] = grades
+    for courses, grades in courses_list.items():
+        print(f'{courses}: {sum(grades)/len(grades):.2f}')
+
+
+def aver_lecturer(lecturer_list):
+    """Расчет средней оценки по всем лекторам"""
+    courses_list = {}
+    for lecturer in lecturer_list:
+        for courses, grades in lecturer.grades.items():
+            if courses in courses_list:
+                courses_list[courses] += grades
+            else:
+                courses_list[courses] = grades
+    for courses, grades in courses_list.items():
+        print(f'{courses}: {sum(grades) / len(grades):.2f}')
 
 
 class Student:
@@ -32,8 +58,8 @@ class Student:
             f"Имя: {self.name}\n"
             f"Фамилия: {self.surname}\n"
             f"Средняя оценка за лекции: {average(self.grades):.2f}\n"
-            f"Курсы в процессе изучения: {','.join(self.courses_in_progress)}\n"
-            f"Завершенные курсы: {','.join(self.finished_courses)}\n"
+            f"Курсы в процессе изучения: {', '.join(self.courses_in_progress)}\n"
+            f"Завершенные курсы: {', '.join(self.finished_courses)}\n"
         )
         return res
 
@@ -97,10 +123,12 @@ best_student = Student('Ruoy', 'Eman', 'man')
 best_student.courses_in_progress += ['Python']
 
 super_student = Student('Naly', 'Verc', 'woman')
-super_student.courses_in_progress += ['Python']
+super_student.courses_in_progress += ['Python', 'GIT', 'Java']
+
+student_list = [best_student, super_student]
 
 cool_reviewer = Reviewer('Some', 'Buddy')
-cool_reviewer.courses_attached += ['Python']
+cool_reviewer.courses_attached += ['Python', 'GIT', 'Java']
 
 cool_reviewer.rate_hw(best_student, 'Python', 9)
 cool_reviewer.rate_hw(best_student, 'Python', 8)
@@ -109,28 +137,38 @@ cool_reviewer.rate_hw(best_student, 'Python', 9)
 cool_reviewer.rate_hw(super_student, 'Python', 10)
 cool_reviewer.rate_hw(super_student, 'Python', 10)
 cool_reviewer.rate_hw(super_student, 'Python', 10)
+cool_reviewer.rate_hw(super_student, 'GIT', 10)
+cool_reviewer.rate_hw(super_student, 'GIT', 7)
+cool_reviewer.rate_hw(super_student, 'Java', 9)
 
-cool_lecturer = Lecturer("Oleg", "Bulygin")
-cool_lecturer.courses_attached += ['Python']
+best_lecturer = Lecturer("Oleg", "Bulygin")
+best_lecturer.courses_attached += ['Python']
 
-best_student.rate_hw(cool_lecturer, 'Python', 10)
-best_student.rate_hw(cool_lecturer, 'Python', 10)
-best_student.rate_hw(cool_lecturer, 'Python', 10)
+best_student.rate_hw(best_lecturer, 'Python', 10)
+best_student.rate_hw(best_lecturer, 'Python', 10)
+best_student.rate_hw(best_lecturer, 'Python', 10)
 
-bad_lecturer = Lecturer("Alexandr", "Bardin")
-bad_lecturer.courses_attached += ['Python']
+good_lecturer = Lecturer("Alexandr", "Bardin")
+good_lecturer.courses_attached += ['Python']
 
-best_student.rate_hw(bad_lecturer, 'Python', 4)
-best_student.rate_hw(bad_lecturer, 'Python', 5)
-best_student.rate_hw(bad_lecturer, 'Python', 6)
+best_student.rate_hw(good_lecturer, 'Python', 4)
+best_student.rate_hw(good_lecturer, 'Python', 5)
+best_student.rate_hw(good_lecturer, 'Python', 6)
+
+lecturer_list = [best_lecturer, good_lecturer]
 
 print(best_student.grades)
-print(cool_lecturer.grades)
+print(super_student.grades)
+print(best_lecturer.grades)
 
 print(cool_reviewer)
-print(cool_lecturer)
-print(bad_lecturer)
+print(best_lecturer)
+print(good_lecturer)
 print(best_student)
 print(super_student)
-print(bad_lecturer < cool_lecturer)
+print(good_lecturer < best_lecturer)
 print(best_student > super_student)
+print()
+aver_student(student_list)
+print()
+aver_lecturer(lecturer_list)
